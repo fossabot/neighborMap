@@ -84,20 +84,31 @@ var ViewModel = function(){
 	};
 
 
-  
+  	//Filter the search results
 	self.filterText = ko.observable("");
 	self.filteredItems = ko.computed(function(){
 		var reg;
+		
+		//Condition the text to be filtered
 		fText = self.filterText().replace(/\|\s*$/gi, '|');
 		fText = fText.replace(/\|\s*$/gi, '');
 		console.log('regex: ', fText);
 		reg = new RegExp(fText, "gi");
 
+		//Get a list of all th filtered items from the list
 		var filtered = ko.utils.arrayFilter(self.list(), function(item){
 			if(fText.length){
-				return ko.utils.unwrapObservable(item.title).match(reg);
+				//Find the result
+				var res = ko.utils.unwrapObservable(item.title).match(reg);
+				//Remove the map icon if neccesary
+				if(res == null){
+					markers[ko.utils.unwrapObservable(item.id)-1].setMap(null);
+				}
+				return res;
 			}
 			else{
+				//Place the map icon back on the map
+				markers[ko.utils.unwrapObservable(item.id)-1].setMap(map);
 				return 1;
 			}
 		});

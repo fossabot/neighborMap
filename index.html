@@ -10,8 +10,7 @@
 		<div class="sidebar">
 			<header>Neighborhood</header>
 			<hr>
-			<input data-bind="value: filterText, valueUpdate: 'afterkeydown'">
-			<input type="button" id="filter" value="Filter">
+			<input class="searchbar" data-bind="value: filterText, valueUpdate: 'afterkeydown'">
 			<ul data-bind="foreach: filteredItems">
 				<li data-bind="text: title, click: $parent.selectMarker, event{ mouseover: $parent.highlight, mouseout: $parent.dehighlight }"></li>
 			</ul>
