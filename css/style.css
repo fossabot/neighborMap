@@ -15,12 +15,17 @@ html, body {
 	width: 100%;
 	height: 100%;
 }
-.container{
+#container{
 	height: 100%;
 	/* Keeps track of the sidebar bar */
 	width: calc(100% - 200px);
 	display: flex;
 	flex-wrap: wrap;
+}
+
+.searchbar{
+	text-align: center;
+	width: 100%;
 }
 
 #map{
@@ -37,9 +42,23 @@ html, body {
 	background-color: #565854;
 }
 
-.sidebar{
+#hidebutton{
+	position: relative;
+	color: #FFFFFF;
+	height: 100%;
+	width: 50px;
+}
+#hidebutton > i{
+	position: absolute;
+	top: 50%;
+	margin-top: -10px;
+	text-align: center;
+	width: 100%;
+}
+
+#sidebar{
 	background-color: #565854;
-	color: #BFFFC0;
+	color: #E7FFE8;
 	height: 100%;
 	width: 200px;
 	top: 100px;
@@ -48,9 +67,21 @@ html, body {
 	text-align: left;
 }
 
-.sidebar > header {
+#sidebar > header {
 	font-weight: 400;
 	font-size: 26px;
 	text-align: center;
+
+}
+
+/* Mobile Desplays */
+@media(max-width: 700px){
+	#sidebar{
+		display: none;
+	}
+
+	#container{
+		width: 100%;
+	}
 
 }

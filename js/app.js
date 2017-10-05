@@ -136,7 +136,7 @@ function populateInfoWindow(marker, infowindow) {
 		var v = new Date().getTime();
 		url += "https://api.foursquare.com/v2/venues/search?";
 		url += $.param({'query': marker.title, 'client_id': client_id, 'client_secret': client_secret, 'v': v,});
-		url += '&' + $.param({'ll':marker.getPosition().lat() + ',' +marker.getPosition().lng(), 'limit': 2, 'radius': 5});
+		url += '&' + $.param({'ll':marker.getPosition().lat() + ',' +marker.getPosition().lng(), 'limit': 2, 'radius': 50});
 		console.log(url);
 
 		infowindow.marker = marker;
@@ -178,3 +178,21 @@ function makeMarkerIcon(markerColor) {
 		new google.maps.Size(21,34));
 	return markerImage;
 }
+
+//Function to hide the sidebar
+function hidesidebar(){
+	console.log("hidebar");
+	var side = document.getElementById('sidebar');
+	var cont = document.getElementById('container');
+	if (side.style.display === "none") {
+		side.style.display = "block";
+		cont.style.width = 'calc(100% - 200px)';
+		google.maps.event.trigger(map, "resize");
+	}else{
+		side.style.display = "none";
+		cont.style.width = '100%';
+		google.maps.event.trigger(map, "resize");
+	}
+
+}
+
