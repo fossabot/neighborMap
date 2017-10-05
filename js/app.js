@@ -25,13 +25,13 @@ var initialMarkers = [
 	title: 'Happy Camper'
 }
 
-]
+];
 
 var ListItem = function(data, identification) {
 	this.position = ko.observable(data.position);
 	this.title = ko.observable(data.title);
 	this.id = identification;
-}
+};
 
 //Isnt run until into page is loaded on API callback to initMap()
 var ViewModel = function(){
@@ -48,12 +48,12 @@ var ViewModel = function(){
 
 		var marker = new google.maps.Marker({
 			map: map,
-            position: newMarker.position,
-            title: newMarker.title,
-            animation: google.maps.Animation.DROP,
-            icon: defaultIcon,
-            id: i
-          });
+			position: newMarker.position,
+			title: newMarker.title,
+			animation: google.maps.Animation.DROP,
+			icon: defaultIcon,
+			id: i
+		});
 		markers.push(marker);
 		marker.addListener('click', function(){
 			populateInfoWindow(this, infoWindow);
@@ -61,11 +61,11 @@ var ViewModel = function(){
 
 		//Mouseover and off for markers
 		marker.addListener('mouseover', function() {
-        	this.setIcon(highlightedIcon);
-        });
-        marker.addListener('mouseout', function() {
-   		     this.setIcon(defaultIcon);
-        });
+			this.setIcon(highlightedIcon);
+		});
+		marker.addListener('mouseout', function() {
+			this.setIcon(defaultIcon);
+		});
 
 	});
 	
@@ -85,10 +85,10 @@ var ViewModel = function(){
 
 
   	//Filter the search results
-	self.filterText = ko.observable("");
-	self.filteredItems = ko.computed(function(){
-		var reg;
-		
+  	self.filterText = ko.observable("");
+  	self.filteredItems = ko.computed(function(){
+  		var reg;
+
 		//Condition the text to be filtered
 		fText = self.filterText().replace(/\|\s*$/gi, '|');
 		fText = fText.replace(/\|\s*$/gi, '');
@@ -101,7 +101,7 @@ var ViewModel = function(){
 				//Find the result
 				var res = ko.utils.unwrapObservable(item.title).match(reg);
 				//Remove the map icon if neccesary
-				if(res == null){
+				if(res === null){
 					markers[ko.utils.unwrapObservable(item.id)-1].setMap(null);
 				}
 				return res;
@@ -114,7 +114,7 @@ var ViewModel = function(){
 		});
 		return filtered;
 	}, self);
-}
+  };
 //Run on maps API callback
 function initMap(){
 
@@ -146,7 +146,7 @@ function populateInfoWindow(marker, infowindow) {
 			if(data.meta.code == 200){
 				document.getElementById('foursquare').innerHTML = data.response.venues[0].contact.formattedPhone;
 				document.getElementById('fourlink').href = data.response.venues[0].url;
-			};
+			}
 		}).fail(function(jqxhr, textStatus, error){
 			console.log('error');
 		});
