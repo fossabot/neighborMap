@@ -59,7 +59,7 @@ var viewModel = function(){
 		marker.addListener('click', function(){
 			populateInfoWindow(this, infoWindow);
 			if(selectMarker){
-				selectMarker.setIcon(defaultIcon)
+				selectMarker.setIcon(defaultIcon);
 			}
 			selectMarker = this;
 			selectMarker.setIcon(clickedIcon);
@@ -127,15 +127,15 @@ var viewModel = function(){
  		sidebarShow = ko.observable(false);
  	}else{
  		sidebarShow = ko.observable(true);
- 	};
+ 	}
  	//Menu button sidebar toggle
 	this.menuAlt = function(){
 		sidebarShow(!ko.utils.unwrapObservable(sidebarShow));
 		google.maps.event.trigger(map, "resize");
-	}
+	};
 	//Set CSS for page container
 	pageContainer = ko.pureComputed(function(){
-		return ko.utils.unwrapObservable(sidebarShow) == true ? "containerWBar" : "containerFull";
+		return ko.utils.unwrapObservable(sidebarShow) === true ? "containerWBar" : "containerFull";
 	});
 	//Handle the page if it is dynamically resizeds
 	$(window).on('resize', function(){
