@@ -1,6 +1,7 @@
 //Google Maps API Javascript
 var map;
 var markers = [];
+var selectMarker = null;
 
 //Knockout JS Javascript and connection to the Google Maps API
 var initialMarkers = [
@@ -42,7 +43,7 @@ var ViewModel = function(){
 	var infoWindow = new google.maps.InfoWindow();
 	var defaultIcon = makeMarkerIcon('009100');
 	var highlightedIcon = makeMarkerIcon('FFFF24');
-	
+	var clickedIcon = makeMarkerIcon('FC0006');
 	initialMarkers.forEach(function(newMarker){
 		self.list.push(new ListItem(newMarker, i++));
 
@@ -57,6 +58,11 @@ var ViewModel = function(){
 		markers.push(marker);
 		marker.addListener('click', function(){
 			populateInfoWindow(this, infoWindow);
+			if(selectMarker){
+				selectMarker.setIcon(defaultIcon)
+			}
+			selectMarker = this;
+			selectMarker.setIcon(clickedIcon);
 		});
 
 		//Mouseover and off for markers
@@ -64,15 +70,17 @@ var ViewModel = function(){
 			this.setIcon(highlightedIcon);
 		});
 		marker.addListener('mouseout', function() {
-			this.setIcon(defaultIcon);
+			if (selectMarker != this) {
+				this.setIcon(defaultIcon);
+			}
 		});
-
 	});
 	
 
 	this.selectMarker = function(selMarker){
 		//Markers mapped to the list by ID so subtract 1
-		populateInfoWindow(markers[selMarker.id-1], infoWindow);	
+		populateInfoWindow(markers[selMarker.id-1], infoWindow);
+		markers[selMarker.id-1].setIcon(clickedIcon);
 	};
 
 	//Mouseover and off for list items
@@ -114,7 +122,7 @@ var ViewModel = function(){
 		});
 		return filtered;
 	}, self);
-  };
+};
 //Run on maps API callback
 function initMap(){
 
@@ -155,6 +163,7 @@ function populateInfoWindow(marker, infowindow) {
 		infowindow.open(map, marker);
 		infowindow.addListener('closeclick', function(){
 			infowindow.marker = null;
+			selectMarker.setIcon(makeMarkerIcon('009100'));
 		});
 	}
 
