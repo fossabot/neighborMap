@@ -35,7 +35,7 @@ var ListItem = function(data, identification) {
 };
 
 //Isnt run until into page is loaded on API callback to initMap()
-var ViewModel = function(){
+var viewModel = function(){
 	var self = this;
 	this.list = ko.observableArray([]);
 	var i = 1;
@@ -100,7 +100,6 @@ var ViewModel = function(){
 		//Condition the text to be filtered
 		fText = self.filterText().replace(/\|\s*$/gi, '|');
 		fText = fText.replace(/\|\s*$/gi, '');
-		console.log('regex: ', fText);
 		reg = new RegExp(fText, "gi");
 
 		//Get a list of all th filtered items from the list
@@ -122,17 +121,41 @@ var ViewModel = function(){
 		});
 		return filtered;
 	}, self);
+
+ 	//Sidebar hiding and showing
+ 	if ($(window).width() < 700) {
+ 		sidebarShow = ko.observable(false);
+ 	}else{
+ 		sidebarShow = ko.observable(true);
+ 	};
+ 	//Menu button sidebar toggle
+	this.menuAlt = function(){
+		sidebarShow(!ko.utils.unwrapObservable(sidebarShow));
+		google.maps.event.trigger(map, "resize");
+	}
+	//Set CSS for page container
+	pageContainer = ko.pureComputed(function(){
+		return ko.utils.unwrapObservable(sidebarShow) == true ? "containerWBar" : "containerFull";
+	});
+	//Handle the page if it is dynamically resizeds
+	$(window).on('resize', function(){
+		if ($(window).width() < 700){
+			sidebarShow(false);
+		}
+	});
 };
+
+
+
 //Run on maps API callback
 function initMap(){
-
 	//Initialize the map
 	map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 41.921438, lng: -87.651304},
 		zoom: 14
 	});
 	//Apply bindings now after the intiMap has been run on API callback
-	ko.applyBindings(new ViewModel());
+	ko.applyBindings(new viewModel());
 }
 
 //Make the info window
@@ -148,12 +171,16 @@ function populateInfoWindow(marker, infowindow) {
 		console.log(url);
 
 		infowindow.marker = marker;
-		infowindow.setContent('<div><a id="fourlink" target="_blank">' + marker.title + '</a></div><br><div id="foursquare"></div>');
+		infowindow.setContent('<div><a id="fourlink" target="_blank">' + marker.title + '</a></div><br><div id="foursquare"></div><br><div id="fourAddress"></div>');
 		$.getJSON(url, function (data) {
 			console.log(data);
-			if(data.meta.code == 200){
+			if(data.response.venues.length > 0){
 				document.getElementById('foursquare').innerHTML = data.response.venues[0].contact.formattedPhone;
 				document.getElementById('fourlink').href = data.response.venues[0].url;
+				document.getElementById('fourAddress').innerHTML = data.response.venues[0].location.address;
+			}
+			else{
+				document.getElementById('foursquare').innerHTML = "No data was able to be retrieved about this location";
 			}
 		}).fail(function(jqxhr, textStatus, error){
 			console.log('error');
@@ -187,21 +214,3 @@ function makeMarkerIcon(markerColor) {
 		new google.maps.Size(21,34));
 	return markerImage;
 }
-
-//Function to hide the sidebar
-function hidesidebar(){
-	console.log("hidebar");
-	var side = document.getElementById('sidebar');
-	var cont = document.getElementById('container');
-	if (side.style.display === "none") {
-		side.style.display = "block";
-		cont.style.width = 'calc(100% - 200px)';
-		google.maps.event.trigger(map, "resize");
-	}else{
-		side.style.display = "none";
-		cont.style.width = '100%';
-		google.maps.event.trigger(map, "resize");
-	}
-
-}
-
