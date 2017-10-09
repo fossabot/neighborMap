@@ -46,7 +46,6 @@ var viewModel = function(){
 	var clickedIcon = makeMarkerIcon('FC0006');
 	initialMarkers.forEach(function(newMarker){
 		self.list.push(new ListItem(newMarker, i++));
-
 		var marker = new google.maps.Marker({
 			map: map,
 			position: newMarker.position,
@@ -168,22 +167,19 @@ function populateInfoWindow(marker, infowindow) {
 		url += "https://api.foursquare.com/v2/venues/search?";
 		url += $.param({'query': marker.title, 'client_id': client_id, 'client_secret': client_secret, 'v': v,});
 		url += '&' + $.param({'ll':marker.getPosition().lat() + ',' +marker.getPosition().lng(), 'limit': 2, 'radius': 50});
-		console.log(url);
-
 		infowindow.marker = marker;
-		infowindow.setContent('<div><a id="fourlink" target="_blank">' + marker.title + '</a></div><br><div id="foursquare"></div><br><div id="fourAddress"></div>');
+
 		$.getJSON(url, function (data) {
-			console.log(data);
 			if(data.response.venues.length > 0){
-				document.getElementById('foursquare').innerHTML = data.response.venues[0].contact.formattedPhone;
-				document.getElementById('fourlink').href = data.response.venues[0].url;
-				document.getElementById('fourAddress').innerHTML = data.response.venues[0].location.address;
+				infowindow.setContent('<div><a href="'+data.response.venues[0].url+'" target="_blank">' + marker.title + 
+									  '</a></div><br><div>'+ data.response.venues[0].contact.formattedPhone + '</div><br><div>' + 
+									  data.response.venues[0].location.address + '</div>');
 			}
 			else{
-				document.getElementById('foursquare').innerHTML = "No data was able to be retrieved about this location";
+				infowindow.setContent('<div>' + marker.title + '</div><br><div>No data was able to be retrieved about this location</div>');
 			}
 		}).fail(function(jqxhr, textStatus, error){
-			console.log('error');
+			infowindow.setContent('<div>' + marker.title + '</div><br><div>There was an error retrieving data about this location</div>');
 		});
 
 		//Open it if it is not open
@@ -214,3 +210,11 @@ function makeMarkerIcon(markerColor) {
 		new google.maps.Size(21,34));
 	return markerImage;
 }
+
+
+window.addEventListener('error', function(e) {
+    var ie = window.event || {};
+    var errMsg = e.message || ie.errorMessage || "404 error on " + window.location;
+    var errSrc = (e.filename || ie.errorUrl) + ': ' + (e.lineno || ie.errorLine);
+    window.alert("Error loading Google Maps API")
+}, true);
