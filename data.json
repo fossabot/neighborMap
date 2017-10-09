@@ -1,0 +1,25 @@
+{
+	"locations":
+
+	{
+		"position": {"lat": 41.914000, "lng": -87.644555}
+		"title": "Not Home"
+	}
+	{
+		"position": {"lat": 41.922572, "lng": -87.644352},
+	"title": "Allende #2" 
+	}
+	{
+		"position": {"lat": 41.921092, "lng": -87.633991},
+		"title": "Zoo"
+	}
+	{
+		"position": {"lat": 41.921658, "lng": -87.652406},
+		"title": "State"
+	}
+	{
+		"position": {"lat": 41.904206, "lng": -87.634281},
+		"title": "Happy Camper"
+	}
+
+}

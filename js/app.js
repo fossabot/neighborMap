@@ -35,7 +35,7 @@ var ListItem = function(data, identification) {
 };
 
 //Isnt run until into page is loaded on API callback to initMap()
-var viewModel = function(){
+var ViewModel = function(){
 	var self = this;
 	this.list = ko.observableArray([]);
 	var i = 1;
@@ -95,26 +95,27 @@ var viewModel = function(){
   	self.filterText = ko.observable("");
   	self.filteredItems = ko.computed(function(){
   		var reg;
-
 		//Condition the text to be filtered
 		fText = self.filterText().replace(/\|\s*$/gi, '|');
 		fText = fText.replace(/\|\s*$/gi, '');
 		reg = new RegExp(fText, "gi");
 
-		//Get a list of all th filtered items from the list
+		//Get a list of all th filtered items from theist
 		var filtered = ko.utils.arrayFilter(self.list(), function(item){
 			if(fText.length){
 				//Find the result
 				var res = ko.utils.unwrapObservable(item.title).match(reg);
 				//Remove the map icon if neccesary
 				if(res === null){
-					markers[ko.utils.unwrapObservable(item.id)-1].setMap(null);
+					markers[ko.utils.unwrapObservable(item.id)-1].setVisible(false);
+				}else{
+					markers[ko.utils.unwrapObservable(item.id)-1].setVisible(true);
 				}
 				return res;
 			}
 			else{
 				//Place the map icon back on the map
-				markers[ko.utils.unwrapObservable(item.id)-1].setMap(map);
+				markers[ko.utils.unwrapObservable(item.id)-1].setVisible(true);
 				return 1;
 			}
 		});
@@ -154,7 +155,7 @@ function initMap(){
 		zoom: 14
 	});
 	//Apply bindings now after the intiMap has been run on API callback
-	ko.applyBindings(new viewModel());
+	ko.applyBindings(new ViewModel());
 }
 
 //Make the info window
@@ -211,10 +212,8 @@ function makeMarkerIcon(markerColor) {
 	return markerImage;
 }
 
+//Handles the error sent from Google maps not working
+function mapError(){
+	window.alert("Error loading Google Maps API");
+}
 
-window.addEventListener('error', function(e) {
-    var ie = window.event || {};
-    var errMsg = e.message || ie.errorMessage || "404 error on " + window.location;
-    var errSrc = (e.filename || ie.errorUrl) + ': ' + (e.lineno || ie.errorLine);
-    window.alert("Error loading Google Maps API");
-}, true);
