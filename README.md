@@ -1,4 +1,6 @@
 # Neighborhood Map
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fzlav%2FneighborMap.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fzlav%2FneighborMap?ref=badge_shield)
+
 The neighborhood map is a web application that utilizes the Foursquare and Google maps API to show a list of items in a local neighborhood.
 
 ## Installation
@@ -20,3 +22,6 @@ No errors are known at the moment but they are actively being searched for.
 
 ## License
 GPL
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fzlav%2FneighborMap.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fzlav%2FneighborMap?ref=badge_large)
